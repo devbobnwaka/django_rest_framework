@@ -1,5 +1,6 @@
 import json
-from django.http import JsonResponse
+from django.forms.models import model_to_dict 
+from django.http import JsonResponse, HttpResponse
 
 from products.models import Product
 
@@ -10,18 +11,28 @@ def api_home(request, *args, **kwargs) -> JsonResponse:
     data = {}
     print(request.GET)
     if model_data:
-        data['id'] = model_data.id
-        data['title'] = model_data.title
-        data['content'] = model_data.content
-        data['price'] = model_data.price
-        # model instance (model_data)
-        # turn to a python dict
-        # return JSON to my client
-        # serialization
+        data = model_to_dict(model_data,  fields=['id', 'title'])
     return JsonResponse(data)
 
 #Initial api_home
 """
+def api_home(request, *args, **kwargs) -> HttpResponse:
+    model_data = Product.objects.all().order_by("?").first()
+    data = {}
+    print(request.GET)
+    if model_data:
+        # model instance (model_data)
+        # turn to a python dict
+        # return JSON to my client
+        # serialization
+        # data['id'] = model_data.id
+        # data['title'] = model_data.title
+        # data['content'] = model_data.content
+        # data['price'] = model_data.price
+        data = model_to_dict(model_data,  fields=['id', 'title'])
+        json_data_str = json.dumps(data)
+    return HttpResponse(json_data_str, headers={"content-type": "application/json"})
+
 def api_home(request, *args, **kwargs) -> JsonResponse:
     # request -> HttpRequest -> Django
     # print(dir(request))
