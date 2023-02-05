@@ -9,6 +9,22 @@ from products.serializers import ProductSerializer
 
 
 # Create your views here.
+@api_view(['POST']) #convert a function based view into an API VIEW
+def api_home(request, *args, **kwargs) -> Response:
+    # data = request.data
+    serializer = ProductSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        # instance = serializer.save()
+        # print('instance: ', instance)
+        print('serializer.data: ', serializer.data)
+        data = serializer.data
+        return Response(data)
+    return Response({'Invalid': "not good data"}, status=400)
+
+
+
+
+"""
 @api_view(['GET']) #convert a function based view into an API VIEW
 def api_home(request, *args, **kwargs) -> Response:
     instance = Product.objects.all().order_by("?").first()
@@ -19,6 +35,7 @@ def api_home(request, *args, **kwargs) -> Response:
         data = ProductSerializer(instance).data
         print(data)
     return Response(data)
+"""
 
 #Initial api_home
 """

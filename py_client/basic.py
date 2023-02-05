@@ -4,7 +4,7 @@ import requests
 # endpoint:str = "http://httpbin.org/anything"
 endpoint:str = "http://localhost:8000/api/" #http:// 127.0.0.1:8000/ #django project address
 
-get_response = requests.get(endpoint, params={'abc':123}, json={'product_id':123}) #HTTP REQUEST
+get_response = requests.post(endpoint, params={'abc':123}, json={'title':"Hello world", "content":"This is Hello world"}) #HTTP REQUEST
 # print(get_response.text) #print raw text response
 # print(get_response.json()) #print response in django dictionary
 # print(get_response.status_code)
