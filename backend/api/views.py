@@ -5,15 +5,19 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from products.models import Product
+from products.serializers import ProductSerializer
 
 
 # Create your views here.
 @api_view(['GET']) #convert a function based view into an API VIEW
 def api_home(request, *args, **kwargs) -> Response:
-    model_data = Product.objects.all().order_by("?").first()
+    instance = Product.objects.all().order_by("?").first()
     data = {}
-    if model_data:
-        data = model_to_dict(model_data,  fields=['id', 'title'])
+    print(instance)
+    if instance:
+        # data = model_to_dict(instance,  fields=['id', 'title'])
+        data = ProductSerializer(instance).data
+        print(data)
     return Response(data)
 
 #Initial api_home
