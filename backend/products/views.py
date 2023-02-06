@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import authentication, generics, mixins, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # from django.http import Http404
@@ -13,11 +13,13 @@ from .serializers import ProductSerializer
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
-        title = serializer.validated_data.get(title)
-        content = serializer.validated_data.get(content) or None
+        title = serializer.validated_data.get('title')
+        content = serializer.validated_data.get('content') or None
         if content is None:
             content = title
         print(serializer)
@@ -92,8 +94,8 @@ class ProductMixinView(mixins.ListModelMixin,
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
-        title = serializer.validated_data.get(title)
-        content = serializer.validated_data.get(content) or None
+        title = serializer.validated_data.get('title')
+        content = serializer.validated_data.get('content') or None
         if content is None:
             content = "This is a single view doing cool stuff!!!"
         print(serializer)
